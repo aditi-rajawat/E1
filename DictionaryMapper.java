@@ -8,12 +8,13 @@ import java.io.IOException;
 
 public class DictionaryMapper  extends Mapper<LongWritable, Text, Text, Text> {
       // TODO define class variables for translation, language, and file name
-      String filename;
+      String fullfilename, filename;
 
       public void setup(Context context) {
       // TODO determine the language of the current file by looking at it's name
             FileSplit inputFileSplit = (FileSplit) context.getInputSplit();
-            filename = inputFileSplit.getPath().getName();
+            fullfilename = inputFileSplit.getPath().getName();
+            filename = fullfilename.substring(0, fullfilename.lastIndexOf('.'));
                     //context.getConfiguration().get(inputFileSplit.getPath().getName());
       }
 
