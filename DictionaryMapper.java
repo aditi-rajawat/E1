@@ -13,8 +13,8 @@ public class DictionaryMapper  extends Mapper<LongWritable, Text, Text, Text> {
       public void setup(Context context) {
       // TODO determine the language of the current file by looking at it's name
             FileSplit inputFileSplit = (FileSplit) context.getInputSplit();
-            filename = context.getConfiguration().get(
-                    inputFileSplit.getPath().getName());
+            filename = inputFileSplit.getPath().getName();
+                    //context.getConfiguration().get(inputFileSplit.getPath().getName());
       }
 
       public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
