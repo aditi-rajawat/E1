@@ -28,8 +28,15 @@ public class DictionaryReducer extends Reducer<Text, Text, Text, Text> {
                 key = "spanish";
             else
                 key = null;
-            if (key != null)
-                langTrans.put(key, localValue);
+            if (key != null) {
+                if(!langTrans.containsKey(key))
+                    langTrans.put(key, localValue);
+                else{
+                    String temp = localValue.substring((localValue.indexOf(':')+1), localValue.length());
+                    localValue = langTrans.get(key) + "," + temp;
+                    langTrans.put(key, localValue);
+                }
+            }
         }
 
         if(!langTrans.containsKey("french"))
