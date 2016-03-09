@@ -16,15 +16,15 @@ public class DictionaryReducer extends Reducer<Text, Text, Text, Text> {
         for (Text text : values) {
             String key = null;
             localValue = text.toString();
-            if (localValue.contains("french"))
+            if (localValue.contains("french:"))
                 key = "french";
-            else if (localValue.contains("german"))
+            else if (localValue.contains("german:"))
                 key = "german";
-            else if (localValue.contains("italian"))
+            else if (localValue.contains("italian:"))
                 key = "italian";
-            else if (localValue.contains("portuguese"))
+            else if (localValue.contains("portuguese:"))
                 key = "portuguese";
-            else if (localValue.contains("spanish"))
+            else if (localValue.contains("spanish:"))
                 key = "spanish";
             else
                 key = null;
