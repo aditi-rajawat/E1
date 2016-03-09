@@ -8,13 +8,13 @@ import java.io.IOException;
 
 public class DictionaryMapper  extends Mapper<LongWritable, Text, Text, Text> {
       // TODO define class variables for translation, language, and file name
-      String fullfilename, filename;
+      String filename, language;
 
       public void setup(Context context) {
       // TODO determine the language of the current file by looking at it's name
             FileSplit inputFileSplit = (FileSplit) context.getInputSplit();
-            fullfilename = inputFileSplit.getPath().getName();
-            filename = fullfilename.substring(0, fullfilename.lastIndexOf('.'));
+            filename = inputFileSplit.getPath().getName();
+            language = filename.substring(0, filename.lastIndexOf('.'));
                     //context.getConfiguration().get(inputFileSplit.getPath().getName());
       }
 
@@ -24,6 +24,8 @@ public class DictionaryMapper  extends Mapper<LongWritable, Text, Text, Text> {
             String partOfSpeech = "";
             String translations = "";
             int i=0;
+            String[] validPartOfSpeech = {"[adjective]", "[adverb]", "[conjunction]", "[noun]", "[preposition]", "[pronoun]", "[verb]"};
+
 
       // TODO instantiate a tokenizer based on a regex for the file
             String[] inTokens = value.toString().split("\\t");
@@ -47,11 +49,15 @@ public class DictionaryMapper  extends Mapper<LongWritable, Text, Text, Text> {
                         if((localvalue.lastIndexOf('[')) < localvalue.length()-1){
                               // persist the local value as it's a valid record
                               partOfSpeech = localvalue.substring(localvalue.lastIndexOf('['), localvalue.length());
-                              translations = localvalue.substring(0, localvalue.lastIndexOf('['));
-                              translations = translations.replace(';',',');
-                              localkey = localkey + ": " +partOfSpeech + " ";
-                              localvalue = filename + ":" + translations;
-                              context.write(new Text(localkey), new Text(localvalue));
+                              for(String val: validPartOfSpeech){
+                                    if(partOfSpeech.equalsIgnoreCase(val)){
+                                          translations = localvalue.substring(0, localvalue.lastIndexOf('['));
+                                          translations = translations.replace(';',',');
+                                          localkey = localkey + ": " +partOfSpeech + " ";
+                                          localvalue = language + ":" + translations;
+                                          context.write(new Text(localkey), new Text(localvalue));
+                                    }
+                              }
                         }
                   }
             }
